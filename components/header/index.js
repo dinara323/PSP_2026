@@ -6,7 +6,7 @@ export class HeaderComponent {
     getHTML() {
         return `
             <div style="
-                background-color: #16213e;
+                background-color: #08112a;
                 width: 100%;
                 height: 70px;
                 position: fixed;
@@ -27,8 +27,6 @@ export class HeaderComponent {
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="movies">Фильмы</a>
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="series">Сериалы</a>
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="actors">Актёры</a>
-                <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="calculator">Калькулятор</a>
-                <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="author">Об авторе</a>
             </div>
         `;
     }
