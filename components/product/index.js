@@ -4,14 +4,14 @@ export class ProductComponent {
     }
 
     getHTML(data) {
-        let imageStyle = 'width: 100%; height: 500px; object-fit: cover;';
+        let imageStyle = 'width: 100%; height: 400px; object-fit: cover;'; 
         
         if (data.id === 2) {
             imageStyle += ' object-position: 15%;';
         }
 
         return `
-            <div class="card" style="width: 700px; margin: 0 auto; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="card" style="width: 650px; margin: 0 auto;">
                 <img 
                     src="${data.src}" 
                     class="card-img-top" 
@@ -19,8 +19,8 @@ export class ProductComponent {
                     style="${imageStyle}"
                 >
                 <div class="card-body">
-                    <h5 class="card-title">${data.title}</h5>
-                    <p class="card-text" style="margin-bottom: 0; font-size: 17px; color: black;">${data.text}</p>
+                    <h5 class="card-title" style="font-size: 18px;">${data.title}</h5> 
+                    <p class="card-text" style="margin-bottom: 0; font-size: 14px; color: black;">${data.text}</p> 
                 </div>
             </div>
         `;
