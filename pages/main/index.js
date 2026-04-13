@@ -15,7 +15,7 @@ export class MainPage {
         return `
             <div class="container mt-4">
                 <h1 class="mb-4">Выбор фильма</h1>
-                <div id="main-page" class="d-flex flex-wrap justify-content-center"></div>
+                <div id="main-page" class="d-flex flex-wrap justify-content-start" style="gap: 20px;"></div>
             </div>
         `;
     }

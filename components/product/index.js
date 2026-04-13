@@ -5,9 +5,9 @@ export class ProductComponent {
 
     getHTML(data) {
         return `
-            <div class="card mb-3" style="width: 540px;  margin: 0 auto;">
+            <div class="card mb-3" style="width: 500px;  margin: 0 auto;">
                 <div class="row g-0">
-                    <div class="col-md-4">
+                    <div style = "width: 100%; height: 300px; owerflow: hidden; boarder-radius: 10px;">
                         <img src="${data.src}" class="img-fluid" alt="картинка" style="width: 100%; height: 300px; object-fit: cover;">
                     </div>
                     <div class="col-md-8">
