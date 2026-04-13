@@ -25,27 +25,27 @@ export class MainPage {
             {
                 id: 1,
                 src: "movie1.png",
-                title: "Фильм 1",
-                text: "Человек-паук"
+                title: "Человек-паук",
+                text: "Фантастика, 121 мин, 12+"
             },
             {
                 id: 2,
-                src: "movie2.jpg",
-                title: "Фильм 2",
-                text: "Ледниковый период"
+                src: "movie2.png",
+                title: "Голодные игры",
+                text: "Приключения, 142 мин, 18+"
             },
             {
                 id: 3,
                 src: "Shrek.jpg",
-                title: "Фильм 3",
-                text: "Шрек"
+                title: "Шрек",
+                text: "Мультфильм, 90 мин, 6+"
             },
 
             {
                 id: 4,
                 src: "movie4.jpg",
-                title: "Фильм 4",
-                text: "Зверополис"
+                title: "Зверополис",
+                text: "Мультфильм, 108 мин, 6+"
             }
         ];
     }
