@@ -11,27 +11,31 @@ export class MainPage {
     getHTML() {
         return `
             <div style="text-align: center; padding: 20px;">
-                <h1>ВЫБОР ФИЛЬМА</h1>
+                <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 20px auto;">
+                    <h1 style="margin: 0;">ВЫБОР ФИЛЬМА</h1>
+                    <button id="resetLikesBtn" style="
+                        background: #7f7f7f; color: white; border: none;
+                        border-radius: 8px; padding: 4px 6px; cursor: pointer;
+                    ">🔄</button>
+                </div>
                 
-                <div style="position: relative; width: 1400px; margin: 0 auto;">
+                <div style="position: relative; max-width: 1300px; margin: 0 auto;">
                     <div style="overflow: hidden;">
                         <div id="carouselTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
                     </div>
                     
                     <button id="prevBtn" style="
-                        position: absolute; left: -50px; top: 50%;
-                        background: black; color: white; border: none;
+                        position: absolute; left: -40px; top: 50%;
+                        background: grey; color: white; border: none;
                         width: 40px; height: 40px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
-                        z-index: 10;
                     "><</button>
                     
                     <button id="nextBtn" style="
-                        position: absolute; right: 50px; top: 50%;
-                        background: black; color: white; border: none;
+                        position: absolute; right: -40px; top: 50%;
+                        background: grey; color: white; border: none;
                         width: 40px; height: 40px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
-                        z-index: 10;
                     ">></button>
                 </div>
                 
@@ -67,43 +71,39 @@ export class MainPage {
                 text: "Мультфильм, 108 мин, 6+"
             }
         ];
-    }    
+    }
 
-    getVisibleCards() {
-        const data = this.getData();
-        const cards = [];
-        
-        for (let i = 0; i < 3; i++) {
-            const index = (this.currentIndex + i) % data.length;
-            cards.push(data[index]);
+    resetLikes() {
+        localStorage.removeItem('movieLikes');
+        for (let i = 1; i <= 4; i++) {
+            const likes = document.getElementById(`likesCount-${i}`);
+            const dislikes = document.getElementById(`dislikesCount-${i}`);
+            if (likes) likes.textContent = '0';
+            if (dislikes) dislikes.textContent = '0';
         }
-        
-        return cards;
     }
 
     renderCarousel() {
         const track = document.getElementById('carouselTrack');
         if (!track) return;
         
-        const visibleCards = this.getVisibleCards();
-        
+        const data = this.getData();
         track.innerHTML = '';
         
-        visibleCards.forEach(movie => {
+        for (let i = 0; i < 3; i++) {
+            const movie = data[(this.currentIndex + i) % data.length];
             const cardDiv = document.createElement('div');
-            cardDiv.style.flex = "0 0 280px";
+            cardDiv.style.flex = "0 0 300px";
             
-            const productCard = new ProductCardComponent(cardDiv);
-            productCard.render(movie, (e) => {
-                const id = e.target.dataset.id;
-                new ProductPage(this.parent, id).render();
+            const card = new ProductCardComponent(cardDiv);
+            card.render(movie, (e) => {
+                new ProductPage(this.parent, e.target.dataset.id).render();
             });
             
             track.appendChild(cardDiv);
-        });
+        }
         
-        const dots = document.querySelectorAll('.dot');
-        dots.forEach((dot, i) => {
+        document.querySelectorAll('.dot').forEach((dot, i) => {
             dot.style.background = i === this.currentIndex ? "gold" : "gray";
         });
     }
@@ -111,15 +111,11 @@ export class MainPage {
     render() {
         this.parent.innerHTML = '';
         
-        const header = new HeaderComponent(this.parent);
-        header.render();
-        
+        new HeaderComponent(this.parent).render();
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         
-        const data = this.getData();
-        const dotsDiv = document.getElementById('dots');
-        
-        data.forEach((_, i) => {
+        // Точки
+        this.getData().forEach((_, i) => {
             const dot = document.createElement('div');
             dot.className = 'dot';
             dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'gold' : 'gray'}; cursor: pointer;`;
@@ -127,20 +123,22 @@ export class MainPage {
                 this.currentIndex = i;
                 this.renderCarousel();
             };
-            dotsDiv.appendChild(dot);
+            document.getElementById('dots').appendChild(dot);
         });
         
+        // Кнопки карусели
         document.getElementById('prevBtn').onclick = () => {
-            const data = this.getData();
-            this.currentIndex = (this.currentIndex - 1 + data.length) % data.length;
+            this.currentIndex = (this.currentIndex - 1 + 4) % 4;
             this.renderCarousel();
         };
         
         document.getElementById('nextBtn').onclick = () => {
-            const data = this.getData();
-            this.currentIndex = (this.currentIndex + 1) % data.length;
+            this.currentIndex = (this.currentIndex + 1) % 4;
             this.renderCarousel();
         };
+        
+        // Кнопка сброса лайков
+        document.getElementById('resetLikesBtn').onclick = () => this.resetLikes();
         
         this.renderCarousel();
     }
