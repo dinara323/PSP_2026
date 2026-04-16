@@ -1,111 +1,163 @@
 import { ProductCardComponent } from "../../components/product-card/index.js";
+import { ModelCardComponent } from "../../components/model-card/index.js";
+import { ModelViewPage } from "../model-view/index.js";
 import { ProductPage } from "../product/index.js";
 import { HeaderComponent } from "../../components/header/index.js";
 
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
-        this.currentIndex = 0;
+        this.movieIndex = 0;
+        this.modelIndex = 0;
     }
 
     getHTML() {
         return `
             <div style="text-align: center; padding: 20px;">
-                <h1>ВЫБОР ФИЛЬМА</h1>
+                <h1>КИНОПОРТАЛ</h1>
                 
-                <div style="position: relative; width: 1400px; margin: 0 auto;">
+                <!-- ПЕРВАЯ КАРУСЕЛЬ: ФИЛЬМЫ -->
+                <h2 style="margin-top: 30px;">🎬 Фильмы</h2>
+                <div style="position: relative; width: 900px; margin: 0 auto;">
                     <div style="overflow: hidden;">
-                        <div id="carouselTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
+                        <div id="movieTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
                     </div>
-                    
-                    <button id="prevBtn" style="
-                        position: absolute; left: -50px; top: 50%;
+                    <button id="moviePrev" style="
+                        position: absolute; left: -40px; top: 50%;
                         background: black; color: white; border: none;
-                        width: 40px; height: 40px; border-radius: 50%;
+                        width: 36px; height: 36px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
                         z-index: 10;
-                    "><</button>
-                    
-                    <button id="nextBtn" style="
-                        position: absolute; right: 50px; top: 50%;
+                    ">◀</button>
+                    <button id="movieNext" style="
+                        position: absolute; right: -40px; top: 50%;
                         background: black; color: white; border: none;
-                        width: 40px; height: 40px; border-radius: 50%;
+                        width: 36px; height: 36px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
                         z-index: 10;
-                    ">></button>
+                    ">▶</button>
                 </div>
+                <div id="movieDots" style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;"></div>
                 
-                <div id="dots" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;"></div>
+                <!-- ВТОРАЯ КАРУСЕЛЬ: 3D МОДЕЛИ -->
+                <h2 style="margin-top: 50px;">📷 3D Камеры</h2>
+                <div style="position: relative; width: 900px; margin: 0 auto;">
+                    <div style="overflow: hidden;">
+                        <div id="modelTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
+                    </div>
+                    <button id="modelPrev" style="
+                        position: absolute; left: -40px; top: 50%;
+                        background: black; color: white; border: none;
+                        width: 36px; height: 36px; border-radius: 50%;
+                        cursor: pointer; transform: translateY(-50%);
+                        z-index: 10;
+                    ">◀</button>
+                    <button id="modelNext" style="
+                        position: absolute; right: -40px; top: 50%;
+                        background: black; color: white; border: none;
+                        width: 36px; height: 36px; border-radius: 50%;
+                        cursor: pointer; transform: translateY(-50%);
+                        z-index: 10;
+                    ">▶</button>
+                </div>
+                <div id="modelDots" style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;"></div>
             </div>
         `;
     }
 
-    getData() {
+    getMovies() {
         return [
-            {
-                id: 1,
-                src: "movie1.png",
-                title: "Человек-паук",
-                text: "Фантастика, 121 мин, 12+"
-            },
-            {
-                id: 2,
-                src: "movie2.png",
-                title: "Голодные игры",
-                text: "Приключения, 142 мин, 18+"
-            },
-            {
-                id: 3,
-                src: "Shrek.jpg",
-                title: "Шрек",
-                text: "Мультфильм, 90 мин, 6+"
-            },
-            {
-                id: 4,
-                src: "movie4.jpg",
-                title: "Зверополис",
-                text: "Мультфильм, 108 мин, 6+"
-            }
+            { id: 1, src: "movie1.png", title: "Человек-паук", text: "Фантастика, 121 мин, 12+" },
+            { id: 2, src: "movie2.png", title: "Голодные игры", text: "Приключения, 142 мин, 18+" },
+            { id: 3, src: "Shrek.jpg", title: "Шрек", text: "Мультфильм, 90 мин, 6+" },
+            { id: 4, src: "movie4.jpg", title: "Зверополис", text: "Мультфильм, 108 мин, 6+" }
         ];
-    }    
-
-    getVisibleCards() {
-        const data = this.getData();
-        const cards = [];
-        
-        for (let i = 0; i < 3; i++) {
-            const index = (this.currentIndex + i) % data.length;
-            cards.push(data[index]);
-        }
-        
-        return cards;
     }
 
-    renderCarousel() {
-        const track = document.getElementById('carouselTrack');
+    getModels() {
+    return [
+        { 
+            id: "instant", 
+            path: "./models/Instant Camera.glb", 
+            title: "Instant Camera", 
+            text: "Мгновенная камера"
+        },
+        { 
+            id: "video", 
+            path: "./models/Video Camera.glb", 
+            title: "Video Camera", 
+            text: "Видеокамера"
+        },
+        { 
+            id: "classic-video", 
+            path: "./models/Classic video camera.glb", 
+            title: "Classic Video Camera", 
+            text: "Классическая видеокамера"
+        },
+        { 
+            id: "camera", 
+            path: "./models/camera.glb", 
+            title: "Camera", 
+            text: "Фотоаппарат"
+        }
+    ];
+}
+
+    renderMovieCarousel() {
+        const track = document.getElementById('movieTrack');
         if (!track) return;
         
-        const visibleCards = this.getVisibleCards();
-        
+        const movies = this.getMovies();
         track.innerHTML = '';
         
-        visibleCards.forEach(movie => {
+        for (let i = 0; i < 3; i++) {
+            const movie = movies[(this.movieIndex + i) % movies.length];
             const cardDiv = document.createElement('div');
             cardDiv.style.flex = "0 0 280px";
             
             const productCard = new ProductCardComponent(cardDiv);
             productCard.render(movie, (e) => {
-                const id = e.target.dataset.id;
-                new ProductPage(this.parent, id).render();
+                new ProductPage(this.parent, e.target.dataset.id).render();
             });
             
             track.appendChild(cardDiv);
-        });
+        }
         
-        const dots = document.querySelectorAll('.dot');
-        dots.forEach((dot, i) => {
-            dot.style.background = i === this.currentIndex ? "gold" : "gray";
-        });
+        const dots = document.querySelectorAll('#movieDots .dot');
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].style.background = i === this.movieIndex ? "gold" : "gray";
+        }
+    }
+
+    renderModelCarousel() {
+        const track = document.getElementById('modelTrack');
+        if (!track) return;
+        
+        const models = this.getModels();
+        track.innerHTML = '';
+        
+        for (let i = 0; i < models.length; i++) {
+            const model = models[i];
+            const cardDiv = document.createElement('div');
+            cardDiv.style.flex = "0 0 280px";
+            
+            const modelCard = new ModelCardComponent(cardDiv, model);
+            modelCard.render((id, title) => {
+    // Находим полный путь к модели
+    const model = models.find(m => m.id === id);
+    if (model) {
+        const modelPage = new ModelViewPage(this.parent, id, title, model.path);
+        modelPage.render();
+    }
+});
+            
+            track.appendChild(cardDiv);
+        }
+        
+        const dots = document.querySelectorAll('#modelDots .dot');
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].style.background = i === this.modelIndex ? "gold" : "gray";
+        }
     }
 
     render() {
@@ -116,32 +168,53 @@ export class MainPage {
         
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         
-        const data = this.getData();
-        const dotsDiv = document.getElementById('dots');
-        
-        data.forEach((_, i) => {
+        // Точки для фильмов
+        const movies = this.getMovies();
+        const movieDotsDiv = document.getElementById('movieDots');
+        for (let i = 0; i < movies.length; i++) {
             const dot = document.createElement('div');
             dot.className = 'dot';
             dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'gold' : 'gray'}; cursor: pointer;`;
             dot.onclick = () => {
-                this.currentIndex = i;
-                this.renderCarousel();
+                this.movieIndex = i;
+                this.renderMovieCarousel();
             };
-            dotsDiv.appendChild(dot);
-        });
+            movieDotsDiv.appendChild(dot);
+        }
         
-        document.getElementById('prevBtn').onclick = () => {
-            const data = this.getData();
-            this.currentIndex = (this.currentIndex - 1 + data.length) % data.length;
-            this.renderCarousel();
+        // Точки для моделей
+        const models = this.getModels();
+        const modelDotsDiv = document.getElementById('modelDots');
+        for (let i = 0; i < models.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'gold' : 'gray'}; cursor: pointer;`;
+            dot.onclick = () => {
+                this.modelIndex = i;
+                this.renderModelCarousel();
+            };
+            modelDotsDiv.appendChild(dot);
+        }
+        
+        // Кнопки
+        document.getElementById('moviePrev').onclick = () => {
+            this.movieIndex = (this.movieIndex - 1 + movies.length) % movies.length;
+            this.renderMovieCarousel();
+        };
+        document.getElementById('movieNext').onclick = () => {
+            this.movieIndex = (this.movieIndex + 1) % movies.length;
+            this.renderMovieCarousel();
+        };
+        document.getElementById('modelPrev').onclick = () => {
+            this.modelIndex = (this.modelIndex - 1 + models.length) % models.length;
+            this.renderModelCarousel();
+        };
+        document.getElementById('modelNext').onclick = () => {
+            this.modelIndex = (this.modelIndex + 1) % models.length;
+            this.renderModelCarousel();
         };
         
-        document.getElementById('nextBtn').onclick = () => {
-            const data = this.getData();
-            this.currentIndex = (this.currentIndex + 1) % data.length;
-            this.renderCarousel();
-        };
-        
-        this.renderCarousel();
+        this.renderMovieCarousel();
+        this.renderModelCarousel();
     }
 }
