@@ -6,11 +6,11 @@ export class ProductCardComponent {
     getHTML(data) {
         let imageStyle = 'width: 100%; height: 300px; object-fit: cover;';
         if (data.id === 2) {
-            imageStyle += ' object-position: 13%;';  
+            imageStyle += ' object-position: 13%;';
         }
 
         return `
-            <div class="card" style="width: 400px; margin:10px;">
+            <div class="card" style="width: 400px; margin: 10px;">
                 <img class="card-img-top" src="${data.src}" alt="картинка" style="${imageStyle}">
                 <div class="card-body">
                     <h5 class="card-title">${data.title}</h5>
@@ -22,9 +22,13 @@ export class ProductCardComponent {
     }
 
     addListeners(data, listener) {
-        document
-            .getElementById(`click-card-${data.id}`)
-            .addEventListener("click", listener);
+        // Ждём следующий цикл событий, чтобы DOM обновился
+        setTimeout(() => {
+            const button = document.getElementById(`click-card-${data.id}`);
+            if (button) {
+                button.addEventListener("click", listener);
+            }
+        }, 0);
     }
 
     render(data, listener) {

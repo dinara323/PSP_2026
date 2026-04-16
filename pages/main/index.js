@@ -5,17 +5,37 @@ import { HeaderComponent } from "../../components/header/index.js";
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
-    }
-
-    get pageRoot() {
-        return document.getElementById('main-page');
+        this.currentIndex = 0;
     }
 
     getHTML() {
         return `
-            <div class="container mt-4">
-                <h1 class="mb-4">Выбор фильма</h1>
-                <div id="main-page" class="d-flex flex-wrap justify-content-start"></div>
+            <div style="text-align: center; padding: 20px;">
+                <h1>ВЫБОР ФИЛЬМА</h1>
+                
+                <div style="position: relative; width: 1400px; margin: 0 auto;">
+                    <div style="overflow: hidden;">
+                        <div id="carouselTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
+                    </div>
+                    
+                    <button id="prevBtn" style="
+                        position: absolute; left: -50px; top: 50%;
+                        background: black; color: white; border: none;
+                        width: 40px; height: 40px; border-radius: 50%;
+                        cursor: pointer; transform: translateY(-50%);
+                        z-index: 10;
+                    "><</button>
+                    
+                    <button id="nextBtn" style="
+                        position: absolute; right: 50px; top: 50%;
+                        background: black; color: white; border: none;
+                        width: 40px; height: 40px; border-radius: 50%;
+                        cursor: pointer; transform: translateY(-50%);
+                        z-index: 10;
+                    ">></button>
+                </div>
+                
+                <div id="dots" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;"></div>
             </div>
         `;
     }
@@ -40,7 +60,6 @@ export class MainPage {
                 title: "Шрек",
                 text: "Мультфильм, 90 мин, 6+"
             },
-
             {
                 id: 4,
                 src: "movie4.jpg",
@@ -48,27 +67,81 @@ export class MainPage {
                 text: "Мультфильм, 108 мин, 6+"
             }
         ];
+    }    
+
+    getVisibleCards() {
+        const data = this.getData();
+        const cards = [];
+        
+        for (let i = 0; i < 3; i++) {
+            const index = (this.currentIndex + i) % data.length;
+            cards.push(data[index]);
+        }
+        
+        return cards;
     }
 
-    clickCard(e) {
-        const cardId = e.target.dataset.id;
-        const productPage = new ProductPage(this.parent, cardId);
-        productPage.render();
+    renderCarousel() {
+        const track = document.getElementById('carouselTrack');
+        if (!track) return;
+        
+        const visibleCards = this.getVisibleCards();
+        
+        track.innerHTML = '';
+        
+        visibleCards.forEach(movie => {
+            const cardDiv = document.createElement('div');
+            cardDiv.style.flex = "0 0 280px";
+            
+            const productCard = new ProductCardComponent(cardDiv);
+            productCard.render(movie, (e) => {
+                const id = e.target.dataset.id;
+                new ProductPage(this.parent, id).render();
+            });
+            
+            track.appendChild(cardDiv);
+        });
+        
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+            dot.style.background = i === this.currentIndex ? "gold" : "gray";
+        });
     }
 
     render() {
         this.parent.innerHTML = '';
-
+        
         const header = new HeaderComponent(this.parent);
         header.render();
-
-        const html = this.getHTML();
-        this.parent.insertAdjacentHTML('beforeend', html);
-
+        
+        this.parent.insertAdjacentHTML('beforeend', this.getHTML());
+        
         const data = this.getData();
-        data.forEach((item) => {
-            const productCard = new ProductCardComponent(this.pageRoot);
-            productCard.render(item, this.clickCard.bind(this));
+        const dotsDiv = document.getElementById('dots');
+        
+        data.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'gold' : 'gray'}; cursor: pointer;`;
+            dot.onclick = () => {
+                this.currentIndex = i;
+                this.renderCarousel();
+            };
+            dotsDiv.appendChild(dot);
         });
+        
+        document.getElementById('prevBtn').onclick = () => {
+            const data = this.getData();
+            this.currentIndex = (this.currentIndex - 1 + data.length) % data.length;
+            this.renderCarousel();
+        };
+        
+        document.getElementById('nextBtn').onclick = () => {
+            const data = this.getData();
+            this.currentIndex = (this.currentIndex + 1) % data.length;
+            this.renderCarousel();
+        };
+        
+        this.renderCarousel();
     }
 }
