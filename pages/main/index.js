@@ -14,28 +14,27 @@ export class MainPage {
     getHTML() {
         return `
             <div style="text-align: center; padding: 20px;">
-                <h1>КИНОПОРТАЛ</h1>
                 
                 <!-- ПЕРВАЯ КАРУСЕЛЬ: ФИЛЬМЫ -->
-                <h2 style="margin-top: 30px;">🎬 Фильмы</h2>
-                <div style="position: relative; width: 900px; margin: 0 auto;">
+                <h2 style="margin-top: 30px;">Фильмы</h2>
+                <div style="position: relative; width: 1200px; margin: 0 auto;">
                     <div style="overflow: hidden;">
                         <div id="movieTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
                     </div>
                     <button id="moviePrev" style="
                         position: absolute; left: -40px; top: 50%;
-                        background: black; color: white; border: none;
+                        background: grey; color: white; border: none;
                         width: 36px; height: 36px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
                         z-index: 10;
-                    ">◀</button>
+                    "><</button>
                     <button id="movieNext" style="
-                        position: absolute; right: -40px; top: 50%;
-                        background: black; color: white; border: none;
+                        position: absolute; right: -50px; top: 50%;
+                        background: grey; color: white; border: none;
                         width: 36px; height: 36px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
                         z-index: 10;
-                    ">▶</button>
+                    ">></button>
                 </div>
                 <div id="movieDots" style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;"></div>
                 
@@ -47,18 +46,18 @@ export class MainPage {
                     </div>
                     <button id="modelPrev" style="
                         position: absolute; left: -40px; top: 50%;
-                        background: black; color: white; border: none;
+                        background: grey; color: white; border: none;
                         width: 36px; height: 36px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
                         z-index: 10;
-                    ">◀</button>
+                    "><</button>
                     <button id="modelNext" style="
-                        position: absolute; right: -40px; top: 50%;
-                        background: black; color: white; border: none;
+                        position: absolute; right: -50px; top: 50%;
+                        background: grey; color: white; border: none;
                         width: 36px; height: 36px; border-radius: 50%;
                         cursor: pointer; transform: translateY(-50%);
                         z-index: 10;
-                    ">▶</button>
+                    ">></button>
                 </div>
                 <div id="modelDots" style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;"></div>
             </div>
