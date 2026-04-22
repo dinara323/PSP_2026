@@ -22,7 +22,6 @@ export class ProductCardComponent {
     }
 
     addListeners(data, listener) {
-        // Ждём следующий цикл событий, чтобы DOM обновился
         setTimeout(() => {
             const button = document.getElementById(`click-card-${data.id}`);
             if (button) {

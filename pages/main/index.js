@@ -129,35 +129,36 @@ export class MainPage {
     }
 
     renderModelCarousel() {
-        const track = document.getElementById('modelTrack');
-        if (!track) return;
+    const track = document.getElementById('modelTrack');
+    if (!track) return;
+    
+    const models = this.getModels();
+    track.innerHTML = '';
+    
+    // Показываем ТОЛЬКО 3 карточки, начиная с modelIndex
+    for (let i = 0; i < 3; i++) {
+        const model = models[(this.modelIndex + i) % models.length];
+        const cardDiv = document.createElement('div');
+        cardDiv.style.flex = "0 0 300px";
         
-        const models = this.getModels();
-        track.innerHTML = '';
+        const modelCard = new ModelCardComponent(cardDiv, model);
+        modelCard.render((id, title) => {
+            const foundModel = models.find(m => m.id === id);
+            if (foundModel) {
+                const modelPage = new ModelViewPage(this.parent, id, title, foundModel.path);
+                modelPage.render();
+            }
+        });
         
-        for (let i = 0; i < models.length; i++) {
-            const model = models[i];
-            const cardDiv = document.createElement('div');
-            cardDiv.style.flex = "0 0 280px";
-            
-            const modelCard = new ModelCardComponent(cardDiv, model);
-            modelCard.render((id, title) => {
-    // Находим полный путь к модели
-    const model = models.find(m => m.id === id);
-    if (model) {
-        const modelPage = new ModelViewPage(this.parent, id, title, model.path);
-        modelPage.render();
+        track.appendChild(cardDiv);
     }
-});
-            
-            track.appendChild(cardDiv);
-        }
-        
-        const dots = document.querySelectorAll('#modelDots .dot');
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].style.background = i === this.modelIndex ? "gold" : "gray";
-        }
+    
+    // Обновляем точки (индикаторы)
+    const dots = document.querySelectorAll('#modelDots .dot');
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].style.background = i === this.modelIndex ? "gold" : "gray";
     }
+}
 
     render() {
         this.parent.innerHTML = '';
