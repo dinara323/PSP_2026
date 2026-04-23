@@ -13,7 +13,7 @@ export class ModelCardComponent {
 
     getHTML() {
         return `
-            <div class="card" style="width: 280px; margin: 10px;">
+            <div class="card" style="width: 320px; margin: 10px;">
                 <div id="canvas-${this.modelData.id}" style="width: 100%; height: 200px; background: #1a1a2e;"></div>
                 <div class="card-body">
                     <h5 class="card-title">${this.modelData.title}</h5>
@@ -34,7 +34,7 @@ export class ModelCardComponent {
         const height = container.clientHeight;
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x1a1a2e);
+        this.scene.background = new THREE.Color(0x6a6a8e);
 
         this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
         this.camera.position.set(2, 1, 3);
@@ -65,7 +65,7 @@ export class ModelCardComponent {
             
             this.model.position.x = -center.x;
             this.model.position.z = -center.z;
-            this.model.position.y = -minY;
+            this.model.position.y = -center.y;
             
             this.scene.add(this.model);
             this.animate();

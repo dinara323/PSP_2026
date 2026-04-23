@@ -40,7 +40,7 @@ export class MainPage {
                 
                 <!-- ВТОРАЯ КАРУСЕЛЬ: 3D МОДЕЛИ -->
                 <h2 style="margin-top: 50px;">📷 3D Камеры</h2>
-                <div style="position: relative; width: 900px; margin: 0 auto;">
+                <div style="position: relative; width: 1000px; margin: 0 auto;">
                     <div style="overflow: hidden;">
                         <div id="modelTrack" style="display: flex; gap: 20px; transition: 0.3s;"></div>
                     </div>
