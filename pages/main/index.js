@@ -135,7 +135,6 @@ export class MainPage {
     const models = this.getModels();
     track.innerHTML = '';
     
-    // Показываем ТОЛЬКО 3 карточки, начиная с modelIndex
     for (let i = 0; i < 3; i++) {
         const model = models[(this.modelIndex + i) % models.length];
         const cardDiv = document.createElement('div');
@@ -153,7 +152,6 @@ export class MainPage {
         track.appendChild(cardDiv);
     }
     
-    // Обновляем точки (индикаторы)
     const dots = document.querySelectorAll('#modelDots .dot');
     for (let i = 0; i < dots.length; i++) {
         dots[i].style.background = i === this.modelIndex ? "gold" : "gray";
@@ -196,7 +194,6 @@ export class MainPage {
             modelDotsDiv.appendChild(dot);
         }
         
-        // Кнопки
         document.getElementById('moviePrev').onclick = () => {
             this.movieIndex = (this.movieIndex - 1 + movies.length) % movies.length;
             this.renderMovieCarousel();

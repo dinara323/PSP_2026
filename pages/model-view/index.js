@@ -57,7 +57,6 @@ export class ModelViewPage {
     const ambientLight = new THREE.AmbientLight(0x404040);
     this.scene.add(ambientLight);
 
-    // ========== БЕЛАЯ СЕТКА ==========
     const gridHelper = new THREE.GridHelper(8, 20, 0xffffff, 0xffffff);
     gridHelper.position.y = -0.8;
     this.scene.add(gridHelper);

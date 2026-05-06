@@ -43,17 +43,10 @@ export class ModelCardComponent {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(width, height);
         container.appendChild(this.renderer.domElement);
-
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        this.scene.add(ambientLight);
         
         const mainLight = new THREE.DirectionalLight(0xffffff, 1);
         mainLight.position.set(2, 3, 2);
         this.scene.add(mainLight);
-        
-        const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        fillLight.position.set(-1, 1, -1);
-        this.scene.add(fillLight);
 
         const loader = new GLTFLoader();
         loader.load(this.modelData.path, (gltf) => {
@@ -81,7 +74,7 @@ export class ModelCardComponent {
             requestAnimationFrame(animateLoop);
             
             if (this.model) {
-                this.model.rotation.y += 0.005;
+                this.model.rotation.y += 0.02;
             }
             
             this.renderer.render(this.scene, this.camera);

@@ -1,3 +1,10 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 function euclid(...numbers) {
     if (numbers.length === 0) return 0;
     
@@ -17,5 +24,9 @@ function euclid(...numbers) {
     return result;
 }
 
-console.log(euclid(12, 18));
-console.log(euclid(24, 36, 48));
+rl.question('Введите числа через пробел: ', (answer) => {
+    const numbers = answer.split(' ').map(Number);
+    const nod = euclid(...numbers);
+    console.log(`НОД = ${nod}`);
+    rl.close();
+});
