@@ -1,32 +1,26 @@
 [
   {
     "id": 1,
-    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-    "title": "Акция 1",
-    "text": "Такой акции вы еще не видели 1"
+    "src": "movie1.png",
+    "title": "Человек-паук",
+    "text": "Фантастика, 121 мин, 12+"
   },
   {
     "id": 2,
-    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-    "title": "Акция 2",
-    "text": "Такой акции вы еще не видели 2"
+    "src": "movie2.png",
+    "title": "Голодные игры",
+    "text": "Приключения, 142 мин, 18+"
   },
   {
     "id": 3,
-    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-    "title": "Акция 3",
-    "text": "Такой акции вы еще не видели 3"
+    "src": "Shrek.jpg",
+    "title": "Шрек",
+    "text": "Мультфильм, 90 мин, 6+"
   },
   {
     "id": 4,
-    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-    "title": "Акция 4",
-    "text": "Такой акции вы еще не видели 4"
-  },
-  {
-    "id": 5,
-    "src": "https://i.pinimg.com/originals/c9/ea/65/c9ea654eb3a7398b1f702c758c1c4206.jpg",
-    "title": "Акция 5",
-    "text": "Такой акции вы еще не видели 5"
+    "src": "movie4.jpg",
+    "title": "Зверополис",
+    "text": "Мультфильм, 108 мин, 6+"
   }
 ]
