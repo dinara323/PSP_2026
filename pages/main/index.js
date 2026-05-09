@@ -1,11 +1,14 @@
 import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
 import { HeaderComponent } from "../../components/header/index.js";
+import { ajax } from "../../modules/ajax.js";
+import { stockUrls } from "../../modules/stockUrls.js";
 
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
         this.currentIndex = 0;
+        this.data = [];
     }
 
     getHTML() {
@@ -45,32 +48,29 @@ export class MainPage {
     }
 
     getData() {
-        return [
-            {
-                id: 1,
-                src: "movie1.png",
-                title: "Человек-паук",
-                text: "Фантастика, 121 мин, 12+"
-            },
-            {
-                id: 2,
-                src: "movie2.png",
-                title: "Голодные игры",
-                text: "Приключения, 142 мин, 18+"
-            },
-            {
-                id: 3,
-                src: "Shrek.jpg",
-                title: "Шрек",
-                text: "Мультфильм, 90 мин, 6+"
-            },
-            {
-                id: 4,
-                src: "movie4.jpg",
-                title: "Зверополис",
-                text: "Мультфильм, 108 мин, 6+"
-            }
-        ];
+    ajax.get(stockUrls.getStocks(), (data) => {
+        this.data = data;
+        this.renderDots();
+        this.renderCarousel();
+    });
+    }
+
+    renderDots() {
+    const dotsContainer = document.getElementById('dots');
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = '';
+    
+    this.data.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${i === this.currentIndex ? 'gold' : 'gray'}; cursor: pointer;`;
+        dot.onclick = () => {
+            this.currentIndex = i;
+            this.renderCarousel();
+            this.renderDots();
+        };
+        dotsContainer.appendChild(dot);
+    });
     }
 
     resetLikes() {
@@ -84,29 +84,24 @@ export class MainPage {
     }
 
     renderCarousel() {
-        const track = document.getElementById('carouselTrack');
-        if (!track) return;
+    const track = document.getElementById('carouselTrack');
+    if (!track || this.data.length === 0) return;
+    
+    track.innerHTML = '';
+    
+    for (let i = 0; i < 3; i++) {
+        const movie = this.data[(this.currentIndex + i) % this.data.length];
+        const cardDiv = document.createElement('div');
+        cardDiv.style.flex = "0 0 300px";
         
-        const data = this.getData();
-        track.innerHTML = '';
-        
-        for (let i = 0; i < 3; i++) {
-            const movie = data[(this.currentIndex + i) % data.length];
-            const cardDiv = document.createElement('div');
-            cardDiv.style.flex = "0 0 300px";
-            
-            const card = new ProductCardComponent(cardDiv);
-            card.render(movie, (e) => {
-                new ProductPage(this.parent, e.target.dataset.id).render();
-            });
-            
-            track.appendChild(cardDiv);
-        }
-        
-        document.querySelectorAll('.dot').forEach((dot, i) => {
-            dot.style.background = i === this.currentIndex ? "gold" : "gray";
+        const card = new ProductCardComponent(cardDiv);
+        card.render(movie, (e) => {
+            new ProductPage(this.parent, e.target.dataset.id).render();
         });
+        
+        track.appendChild(cardDiv);
     }
+}
 
     render() {
         this.parent.innerHTML = '';
@@ -114,32 +109,29 @@ export class MainPage {
         new HeaderComponent(this.parent).render();
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         
-        // Точки
-        this.getData().forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'gold' : 'gray'}; cursor: pointer;`;
-            dot.onclick = () => {
-                this.currentIndex = i;
-                this.renderCarousel();
-            };
-            document.getElementById('dots').appendChild(dot);
-        });
-        
         // Кнопки карусели
         document.getElementById('prevBtn').onclick = () => {
-            this.currentIndex = (this.currentIndex - 1 + 4) % 4;
-            this.renderCarousel();
+            if (this.data.length > 0) {
+                this.currentIndex = (this.currentIndex - 1 + this.data.length) % this.data.length;
+                this.renderCarousel();
+                this.renderDots();
+            }
         };
-        
+
         document.getElementById('nextBtn').onclick = () => {
-            this.currentIndex = (this.currentIndex + 1) % 4;
-            this.renderCarousel();
+            if (this.data.length > 0) {
+                this.currentIndex = (this.currentIndex + 1) % this.data.length;
+                this.renderCarousel();
+                this.renderDots();
+            }
         };
         
         // Кнопка сброса лайков
         document.getElementById('resetLikesBtn').onclick = () => this.resetLikes();
         
         this.renderCarousel();
+
+        // Загружаем данные с сервера
+        this.getData();
     }
 }

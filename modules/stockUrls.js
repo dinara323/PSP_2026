@@ -1,4 +1,4 @@
-export class StockUrls {
+class StockUrls {
     constructor() {
         this.baseUrl = 'http://localhost:3000';
     }
@@ -15,11 +15,11 @@ export class StockUrls {
         return `${this.baseUrl}/stocks`;
     }
 
-    updateStockById(id) {
+    removeStockById() {
         return `${this.baseUrl}/stocks/${id}`;
     }
 
-    deleteStockById(id) {
+    updateStockById() {
         return `${this.baseUrl}/stocks/${id}`;
     }
 }
