@@ -27,12 +27,28 @@ export class HeaderComponent {
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="movies">Фильмы</a>
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="series">Сериалы</a>
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="actors">Актёры</a>
+                <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="create">➕ Добавить фильм</a>
             </div>
         `;
     }
 
     render() {
-        const html = this.getHTML();
-        this.parent.insertAdjacentHTML('afterbegin', html);
+        this.parent.insertAdjacentHTML('afterbegin', this.getHTML());
+        
+        document.querySelectorAll('[data-page]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                if (page === 'create') {
+                    import('../../pages/create/index.js').then(module => {
+                        new module.CreatePage(document.getElementById('main-container')).render();
+                    });
+                } else if (page === 'main') {
+                    import('../../pages/main/index.js').then(module => {
+                        new module.MainPage(document.getElementById('main-container')).render();
+                    });
+                }
+            });
+        });
     }
 }

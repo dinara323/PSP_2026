@@ -13,14 +13,10 @@ export class ProductPage {
         this.data = null;
     }
 
-    get pageRoot() {
-        return document.getElementById('product-page');
-    }
+    get pageRoot() { return document.getElementById('product-page'); }
 
     getHTML() {
-        return `
-            <div id="product-page" style="display: flex; flex-direction: column; align-items: center;"></div>
-        `;
+        return `<div id="product-page" style="display: flex; flex-direction: column; align-items: center;"></div>`;
     }
 
     loadData() {
@@ -32,42 +28,54 @@ export class ProductPage {
 
     renderContent() {
         if (!this.data) return;
+        const container = this.pageRoot;
+        container.innerHTML = '';
         
-        // Очищаем только контент, но не кнопку "Назад"
-        const productContainer = this.pageRoot;
-        productContainer.innerHTML = '';
-        
-        const stock = new ProductComponent(productContainer);
+        const stock = new ProductComponent(container);
         stock.render(this.data);
 
         const likesData = this.getLikesData();
-        const likes = new LikesComponent(productContainer, this.id, likesData.likes, likesData.dislikes);
+        const likes = new LikesComponent(container, this.id, likesData.likes, likesData.dislikes);
         likes.render();
 
-        const backButton = new BackButtonComponent(productContainer);
+        // КНОПКА УДАЛЕНИЯ
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '🗑️ Удалить фильм';
+        deleteBtn.style.cssText = `
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        `;
+        deleteBtn.onclick = () => {
+            if (confirm(`Удалить фильм "${this.data.title}"?`)) {
+                ajax.delete(stockUrls.deleteStockById(this.id), (data, status) => {
+                    if (status === 204) {
+                        alert('Фильм удалён!');
+                        new MainPage(this.parent).render();
+                    } else {
+                        alert('Ошибка при удалении');
+                    }
+                });
+            }
+        };
+        container.appendChild(deleteBtn);
+
+        const backButton = new BackButtonComponent(container);
         backButton.render(this.clickBack.bind(this));
     }
 
-    clickBack() {
-        const mainPage = new MainPage(this.parent);
-        mainPage.render();
-    }
+    clickBack() { new MainPage(this.parent).render(); }
 
     getLikesData() {
         const saved = JSON.parse(localStorage.getItem('movieLikes')) || {};
         const movieInfo = moviesData[this.id];
-        
-        if (saved[this.id]) {
-            return {
-                likes: saved[this.id].likes,
-                dislikes: saved[this.id].dislikes
-            };
-        }
-        
-        return {
-            likes: movieInfo ? movieInfo.likes : 0,
-            dislikes: movieInfo ? movieInfo.dislikes : 0
-        };
+        if (saved[this.id]) return { likes: saved[this.id].likes, dislikes: saved[this.id].dislikes };
+        return { likes: movieInfo ? movieInfo.likes : 0, dislikes: movieInfo ? movieInfo.dislikes : 0 };
     }
 
     render() {
