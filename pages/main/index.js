@@ -17,13 +17,7 @@ export class MainPage {
             <div style="text-align: center; padding: 20px;">
                 <!-- ПОЛЕ ФИЛЬТРАЦИИ -->
                 <div style="max-width: 400px; margin: 0 auto 30px;">
-                    <input type="text" id="filterInput" placeholder="🔍 Поиск по названию..." style="
-                        width: 100%;
-                        padding: 12px;
-                        font-size: 16px;
-                        border: 2px solid #ddd;
-                        border-radius: 8px;
-                    ">
+                    
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 20px auto;">
@@ -99,15 +93,7 @@ export class MainPage {
         new HeaderComponent(this.parent).render();
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         
-        // Фильтрация
-        const filterInput = document.getElementById('filterInput');
-        if (filterInput) {
-            filterInput.addEventListener('input', (e) => {
-                this.filterTitle = e.target.value;
-                this.currentIndex = 0;
-                this.loadMovies();
-            });
-        }
+        
         
         document.getElementById('prevBtn').onclick = () => {
             if (this.data.length) {

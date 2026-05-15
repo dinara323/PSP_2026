@@ -27,7 +27,7 @@ export class HeaderComponent {
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="movies">Фильмы</a>
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="series">Сериалы</a>
                 <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="actors">Актёры</a>
-                <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="create">➕ Добавить фильм</a>
+                <a href="#" style="margin-left: 40px; font-size: 18px; color: white; text-decoration: none;" data-page="create">Добавить фильм</a>
             </div>
         `;
     }
