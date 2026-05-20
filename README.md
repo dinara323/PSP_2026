@@ -1,6 +1,6 @@
-# 1 - Calculator. HTML/CSS <!-- omit in toc -->
+# 3 - Простое веб-приложение. Верстка <!-- omit in toc -->
 
-> Лабораторная работа 1 для студентов курса "Проектирование сетевых приложений" 4 семестра кафедры ИУ5 МГТУ им Н.Э. Баумана.
+> Лабораторная работа 3 для студентов курса "Проектирование сетевых приложений" 4 семестра кафедры ИУ5 МГТУ им Н.Э. Баумана.
 
 ## Содержание <!-- omit in toc -->
 
@@ -8,13 +8,14 @@
 - [Начало работы](#начало-работы)
 - [Задание](#задание)
 - [Указания по выполнению лабораторной работы](#указания-по-выполнению-лабораторной-работы)
-    - [Требования к реализации](#требования-к-реализации)
+    - [Структура проекта](#структура-проекта)
+	- [Требования к реализации](#требования-к-реализации)
 - [Пример программы](#пример-программы)
 - [Результат работы](#результат-работы)
 
 ## Цель работы
 
-Знакомство с инструментами построения пользовательских интерфейсов web-сайтов: HTML, CSS. В ходе выполнения работы, вам предстоит ознакомиться с кодом реализации простого калькулятора, и затем выполнить задания по варианту.
+Знакомство с node, npm, написание простого приложения на JavaScript. В ходе выполнения работы, вам предстоит ознакомиться с кодом реализации простого интерфейса и вывода данных, и затем выполнить задания по варианту
 
 ---
 
@@ -29,111 +30,169 @@ git pull upstream
 **или**
 
 ```sh
-git pull upstream lab_1
+git pull upstream lab_3
 ```
 
 Переключитесь на ветку с текущей лабораторной работой:
 
 ```sh
-git checkout lab_1
+git checkout lab_3
 ```
 
 Свяжите ветку локального репозитория с вашим удаленным репозиторием:
 
 ```sh
-git push --set-upstream origin lab_1
+git push --set-upstream lab_3
 ```
 
 ## Задание
 
-Создание калькулятора. Верстка на HTML, CSS. Копировать 3-5 основных цветов кодами с сайта по вашей теме (хедер, фон, карточки, кнопки, hover) и еще 2-3 свойства (padding и тд)
+1. Создать двухстраничное приложение из примера по вариантам
+2. Вариант состоит из темы и компонента, который необходимо использовать
+3. Все данные должны соответствовать выбранной теме
+4. Компонент можно применить по своему усмотрению
 
 ---
 ## Указания по выполнению лабораторной работы
-1. Все изменения вносятся в файлы calculator.html и style.css
-2. CSS-правила добавляются в существующий файл стилей
-3. HTML-элементы добавляются в существующую структуру калькулятора
-4. Для проверки открывайте файл в браузере после каждого изменения
+
+1. Инициализировать проект через npm init и установить Bootstrap
+2. Создать классы MainPage и ProductPage с перерисовкой контейнера #root
+3. Вынести компоненты (карточка, кнопка назад) в папку components/
+4. Данные для карточек хранить в массиве в методе getData()
+5. Реализовать лайтбокс с навигацией по стрелкам клавиатуры
 
 ---
 
-## Требования к реализации
-1. Работа должна быть выполнена в файлах calculator.html и style.css
-2. Все изменения должны быть реализованы с использованием только HTML и CSS (допускается минимальное использование JavaScript для пунктов 12, 17)
-3. Калькулятор должен сохранять свою основную функциональность (кнопки должны нажиматься, результат отображаться)
-4. Внешний вид должен быть уникальным и не повторяться с работами других студентов
+### Структура проекта
 
+![Фото 1](image.png)
+
+---
+
+### Требования к реализации
+
+1. Код должен быть написан на JavaScript (ES6+) с использованием модулей (import / export)
+2. Проект должен быть инициализирован через npm init
+3. Установлен и подключен Bootstrap через npm
+4. Страницы должны быть реализованы в виде классов (MainPage, ProductPage)
+5. Компоненты должны быть переиспользуемыми и храниться в папке components/
+6. Данные для карточек должны быть вынесены в отдельный массив в методе getData()
+7. При переходе между страницами должен перерисовываться только контейнер #root
+8. Поддержка открытия страницы продукта по ID карточки
+
+---
 
 ## Пример программы
 
-Важные HTML теги, использованные в работе
-
-```html
-<!-- Основная структура -->
-<div class="calculator">           <!-- Контейнер калькулятора -->
-<div class="result">0</div>        <!-- Поле вывода результата -->
-<div class="buttons">              <!-- Контейнер для кнопок -->
-
-<!-- Кнопки с разными классами -->
-<button class="my-btn secondary">C</button>    <!-- Вторичные кнопки -->
-<button class="my-btn primary">/</button>      <!-- Основные кнопки операций -->
-<button class="my-btn execute">=</button>      <!-- Кнопка выполнения -->
-
-<!-- Переключатель темы -->
-<button id="themeToggle" class="theme-toggle">
-    <span id="themeIcon">🌙</span>
-</button>
-
-<!-- Ссылки -->
-<a href="index.html" class="menu-link">Главная</a>
-```
-Переключение темы 
+Переход на страницу планеты и рендер главной страницы
 
 ```javascript
-function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const themeIcon = document.getElementById('themeIcon');
+export class MainPage {
+    clickCard(cardId) {
+        const planetPage = new PlanetPage(this.parent, cardId);
+        planetPage.render();
+    }
 
-    if (currentTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        themeIcon.textContent = '🌙';
-        localStorage.setItem('theme', 'dark');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        themeIcon.textContent = '☀️';
-        localStorage.setItem('theme', 'light');
+    render() {
+        this.parent.innerHTML = '';
+        const html = this.getHTML();
+        this.parent.insertAdjacentHTML('beforeend', html);
+
+        const container = document.getElementById('planets-container');
+        const data = this.getData();
+
+        data.forEach((item) => {
+            const planetCard = new PlanetCardComponent(container);
+            planetCard.render(item, this.clickCard.bind(this));
+        });
     }
 }
 ```
-Основные свойства
+Обработка клика по заголовку карточки и открытие лайтбокса при клике на изображение
 
-```css
-.my-btn {
-    padding: 0;                    /* Внутренний отступ */
-    height: 50px;
-    width: 50px;
-    border-radius: 20px;          /* Скругление углов кнопок */
-}
-
-.calculator {
-    padding: 25px;                /* Внутренний отступ калькулятора */
-    border: 3px solid var(--calc-border);
-    border-radius: 20px;          /* Скругление углов калькулятора */
-}
-
-.result {
-    padding: 20px;                /* Внутренний отступ поля результата */
-    margin-bottom: 20px;          /* Внешний отступ снизу */
-    border-radius: 20px;
-}
-
-.buttons>div {
-    gap: 8px;                     /* Расстояние между кнопками */
+```javascript
+// pages/main/index.js - MainPage
+export class MainPage {
+    renderCarousel() {
+        const track = document.getElementById('carouselTrack');
+        const data = this.getData();
+        
+        for (let i = 0; i < 3; i++) {
+            const movie = data[(this.currentIndex + i) % data.length];
+            const cardDiv = document.createElement('div');
+            cardDiv.style.flex = "0 0 300px";
+            
+            // Создаём карточку фильма
+            const card = new ProductCardComponent(cardDiv);
+            card.render(movie, (e) => {
+                // При клике на кнопку переходим на страницу фильма
+                new ProductPage(this.parent, e.target.dataset.id).render();
+            });
+            
+            track.appendChild(cardDiv);
+        }
+    }
 }
 ```
+Страница фильма с кнопкой назад
+
+```javascript
+// pages/product/index.js - ProductPage
+export class ProductPage {
+    clickBack() {
+        // Возвращаемся на главную страницу
+        const mainPage = new MainPage(this.parent);
+        mainPage.render();
+    }
+
+    render() {
+        this.parent.innerHTML = '';
+        const html = this.getHTML();
+        this.parent.insertAdjacentHTML('beforeend', html);
+
+        const data = this.getData();
+        
+        // Отображаем информацию о фильме
+        const stock = new ProductComponent(this.pageRoot);
+        stock.render(data);
+
+        // Добавляем кнопку "Назад"
+        const backButton = new BackButtonComponent(this.pageRoot);
+        backButton.render(this.clickBack.bind(this));
+    }
+}
+```
+Компонент кнопки назад
+
+```javascript
+// components/back-button/index.js
+export class BackButtonComponent {
+    getHTML() {
+        return `
+            <button id="back-button" class="btn btn-primary" type="button">Назад</button>
+        `;
+    }
+
+    addListeners(listener) {
+        // Навешиваем обработчик клика на кнопку
+        document
+            .getElementById("back-button")
+            .addEventListener("click", listener);
+    }
+
+    render(listener) {
+        const html = this.getHTML();
+        this.parent.insertAdjacentHTML('beforeend', html);
+        this.addListeners(listener);
+    }
+}
+```
+
 ---
 
 ## Результат работы
 
+![Фото 2](image2.png)
+![Фото 3](image3.png)
 
 ---
