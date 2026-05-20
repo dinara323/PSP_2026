@@ -80,9 +80,7 @@ git push --set-upstream origin lab_1
 <button class="my-btn execute">=</button>      <!-- Кнопка выполнения -->
 
 <!-- Переключатель темы -->
-<button id="themeToggle" class="theme-toggle">
-    <span id="themeIcon">🌙</span>
-</button>
+<button id="theme-indicator" class="theme-btn">🌙</button>
 
 <!-- Ссылки -->
 <a href="index.html" class="menu-link">Главная</a>
@@ -90,20 +88,24 @@ git push --set-upstream origin lab_1
 Переключение темы 
 
 ```javascript
-function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const themeIcon = document.getElementById('themeIcon');
-
-    if (currentTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        themeIcon.textContent = '🌙';
-        localStorage.setItem('theme', 'dark');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        themeIcon.textContent = '☀️';
-        localStorage.setItem('theme', 'light');
-    }
-}
+const themeIndicator = document.getElementById('theme-indicator');
+    let isDarkTheme = true;
+    
+    themeIndicator.onclick = function() {
+        const body = document.body;
+        
+        if (isDarkTheme) {
+            body.classList.add('light-theme');
+            themeIndicator.innerHTML = '☀️';
+            themeIndicator.style.backgroundColor = '#4a6fa5';
+            isDarkTheme = false;
+        } else {
+            body.classList.remove('light-theme');
+            themeIndicator.innerHTML = '🌙';
+            themeIndicator.style.backgroundColor = '#ff9801';
+            isDarkTheme = true;
+        }
+    };
 ```
 Основные свойства
 
@@ -116,9 +118,12 @@ function toggleTheme() {
 }
 
 .calculator {
-    padding: 25px;                /* Внутренний отступ калькулятора */
-    border: 3px solid var(--calc-border);
-    border-radius: 20px;          /* Скругление углов калькулятора */
+  background-color: #2d2d2d; /* Тёмно-серый фон калькулятора */
+  padding: 20px;               /* Внутренние отступы со всех сторон */
+  border: 4px solid #808080; /* Серая рамка толщиной 4 пикселя */
+  border-radius: 20px;         /* Скругление углов калькулятора */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Тень*/
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .result {
@@ -127,9 +132,6 @@ function toggleTheme() {
     border-radius: 20px;
 }
 
-.buttons>div {
-    gap: 8px;                     /* Расстояние между кнопками */
-}
 ```
 ---
 
