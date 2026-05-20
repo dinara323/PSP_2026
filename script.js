@@ -1,28 +1,40 @@
 window.onload = function() {
-    let currentNumber = '';
-    
+    let a = '';
+    let b = '';
+    let expressionResult = '';
+    let selectedOperation = null;
+    let displayExpression = '';
+
     const outputElement = document.getElementById('result');
     
     const digitButtons = document.querySelectorAll('[id ^= "btn_digit_"]');
 
-    function onDigitButtonClicked(digit) {
-        if (digit === '.') {
-            if (currentNumber === '') {
-                currentNumber = '0.';
-            }
-            else if (!currentNumber.includes('.')) {
-                currentNumber += digit;
-            }
-        } 
-        else {
-            currentNumber += digit;
-            
-            if (currentNumber.length > 1 && currentNumber[0] === '0' && currentNumber[1] !== '.') {
-                currentNumber = currentNumber.substring(1);
+    function updateDisplay() {
+        if (!selectedOperation) {
+            displayExpression = a === '' ? '0' : a;
+        } else {
+            if (b === '') {
+                displayExpression = a + ' ' + selectedOperation + ' ';
+            } else {
+                displayExpression = a + ' ' + selectedOperation + ' ' + b;
             }
         }
-        
-        outputElement.innerHTML = currentNumber || '0';
+        outputElement.innerHTML = displayExpression;
+    }
+
+    function onDigitButtonClicked(digit) {
+        if (!selectedOperation) {
+            if ((digit != '.') || (digit == '.' && !a.includes('.'))) {
+                a += digit;
+            }
+            updateDisplay();
+        } 
+        else {
+            if ((digit != '.') || (digit == '.' && !b.includes('.'))) {
+                b += digit;
+                updateDisplay();
+            }
+        }
     }
 
     digitButtons.forEach(button => {
@@ -32,12 +44,206 @@ window.onload = function() {
         };
     });
 
-    document.getElementById('btn_op_clear').onclick = function() {
-        currentNumber = '';
-        outputElement.innerHTML = '0';
-    };
+    function setOperation(op, displayOp) {
+        if (a === '') return;
+        
+        // Если уже есть второй операнд и оператор, вычисляем результат
+        if (selectedOperation && b !== '') {
+            calculateResult();
+        }
+        
+        selectedOperation = displayOp;
+        updateDisplay();
+    }
 
+    document.getElementById("btn_op_mult").onclick = function() { 
+        setOperation('*', '×');
+    }
+    
+    document.getElementById("btn_op_plus").onclick = function() { 
+        setOperation('+', '+');
+    }
+    
+    document.getElementById("btn_op_minus").onclick = function() { 
+        setOperation('-', '-');
+    }
+    
+    document.getElementById("btn_op_div").onclick = function() { 
+        setOperation('/', '÷');
+    }
 
+    function calculateResult() {
+        if (a === '' || b === '' || !selectedOperation) return false;
+        
+        let opForCalc = selectedOperation;
+        if (opForCalc === '×') opForCalc = '*';
+        if (opForCalc === '÷') opForCalc = '/';
+        
+        let result;
+        switch(opForCalc) { 
+            case '*':
+                result = (+a) * (+b);
+                break;
+            case '+':
+                result = (+a) + (+b);
+                break;
+            case '-':
+                result = (+a) - (+b);
+                break;
+            case '/':
+                if (+b === 0) {
+                    outputElement.innerHTML = 'Error';
+                    return false;
+                }
+                result = (+a) / (+b);
+                break;
+            default:
+                return false;
+        }
+        
+        a = result.toString();
+        b = '';
+        selectedOperation = null;
+        updateDisplay();
+        return true;
+    }
+
+    document.getElementById("btn_op_sign").onclick = function() { 
+        if (!selectedOperation) {
+            if (a === '') return;
+            if (a.startsWith('-')) {
+                a = a.substring(1);
+            } else {
+                a = '-' + a;
+            }
+            updateDisplay();
+        } 
+        else {
+            if (b === '') return;
+            if (b.startsWith('-')) {
+                b = b.substring(1);
+            } else {
+                b = '-' + b;
+            }
+            updateDisplay();
+        }
+    }
+
+    document.getElementById("btn_op_percent").onclick = function() { 
+        if (!selectedOperation) {
+            if (a === '') return;
+            const numA = parseFloat(a);
+            a = (numA / 100).toString();
+            updateDisplay();
+        } 
+        else {
+            if (b === '' || a === '') return;
+            const numA = parseFloat(a);
+            const numB = parseFloat(b);
+            const percentValue = (numA * numB) / 100;
+            b = percentValue.toString();
+            updateDisplay();
+        }
+    }
+
+    document.getElementById("btn_op_square").onclick = function() {
+        let currentNumber;
+        if (!selectedOperation) {
+            currentNumber = a;
+        } else {
+            currentNumber = b;
+        }
+        
+        if (currentNumber === '') return;
+        
+        let num = parseFloat(currentNumber);
+        let result = num * num;
+        
+        if (!selectedOperation) {
+            a = result.toString();
+            updateDisplay();
+        } else {
+            b = result.toString();
+            updateDisplay();
+        }
+    }
+
+    document.getElementById("btn_op_000").onclick = function() { 
+        if (!selectedOperation) {
+            if (a === '') {
+                a = '0';
+            }
+            a += '000';
+            updateDisplay();
+        } 
+        else {
+            if (b === '') {
+                b = '0';
+            }
+            b += '000';
+            updateDisplay();
+        }
+    }
+
+    document.getElementById("btn_op_sqrt").onclick = function() {
+        let currentNumber;
+        if (!selectedOperation) {
+            currentNumber = a;
+        } else {
+            currentNumber = b;
+        }
+        
+        if (currentNumber === '') return;
+        
+        let value = parseFloat(currentNumber);
+        
+        if (value < 0) {
+            outputElement.innerHTML = 'Error';
+            return;
+        }
+        
+        let result = Math.sqrt(value);
+        
+        if (!selectedOperation) {
+            a = result.toString();
+            updateDisplay();
+        } else {
+            b = result.toString();
+            updateDisplay();
+        }
+    }
+
+    document.getElementById("btn_op_clear").onclick = function() { 
+        a = '';
+        b = '';
+        selectedOperation = null;
+        expressionResult = '';
+        updateDisplay();
+    }
+
+    document.getElementById("btn_op_equal").onclick = function() { 
+        calculateResult();
+    }
+
+    document.getElementById("btn_op_backspace").onclick = function() {
+        if (!selectedOperation) {
+            if (a === '') return;
+            a = a.slice(0, -1);
+            updateDisplay();
+        } 
+        else {
+            if (b === '') {
+                // Если b пустой, удаляем оператор
+                selectedOperation = null;
+                updateDisplay();
+            } else {
+                b = b.slice(0, -1);
+                updateDisplay();
+            }
+        }
+    }
+
+    // показать калькулятор
     const calculatorContainer = document.getElementById('calculator-container');
     const calculatorLink = document.getElementById('calculator-link');
     
@@ -55,7 +261,7 @@ window.onload = function() {
         }
     };
 
-    // блок темы
+    // тема
     const themeIndicator = document.getElementById('theme-indicator');
     let isDarkTheme = true;
     
@@ -74,9 +280,10 @@ window.onload = function() {
             isDarkTheme = true;
         }
     };
-    // блок кнопки про автора
+    
+    // об авторе
     const authorLink = document.getElementById('author-link');
-    const tooltip = document.getElementById('.author-tooltip');
+    const tooltip = document.querySelector('.author-tooltip');
     
     authorLink.onmouseenter = function() {
         tooltip.style.display = 'block';
@@ -86,5 +293,7 @@ window.onload = function() {
         tooltip.style.display = 'none';
     };
     
-
+    authorLink.onclick = function(event) {
+        event.preventDefault();
+    };
 };
